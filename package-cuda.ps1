@@ -2,10 +2,13 @@
   Build a CUDA-accelerated version of llama.cpp on Windows.
   Requires the NVIDIA CUDA Toolkit to be installed.
   Usage: .\build-cuda.ps1 [-Jobs <N>] [-Architectures <arch-list>]
+  By default builds only for the architecture of the GPU(s) detected via nvidia-smi
+  and uses all logical CPU cores, which is much faster than building every architecture.
 #>
 param(
-    [int]$Jobs = 0,
-    # e.g. "86" for RTX 30xx, "89" for RTX 40xx. Leave empty to let CMake pick.
+    # Defaults to all logical cores. Pass 0 to let cmake/MSBuild decide.
+    [int]$Jobs = [System.Environment]::ProcessorCount,
+    # e.g. "86" for RTX 30xx, "89" for RTX 40xx. Leave empty to auto-detect via nvidia-smi.
     [string]$Architectures = ""
 )
 
@@ -19,6 +22,14 @@ if (-not (Get-Command cmake -ErrorAction SilentlyContinue)) {
 
 if (-not $env:CUDA_PATH) {
     throw "CUDA_PATH environment variable not set. Install the NVIDIA CUDA Toolkit first."
+}
+
+if (-not $Architectures -and (Get-Command nvidia-smi -ErrorAction SilentlyContinue)) {
+    $caps = & nvidia-smi --query-gpu=compute_cap --format=csv,noheader 2>$null | Select-Object -Unique
+    if ($caps) {
+        $Architectures = ($caps | ForEach-Object { $_.Trim() -replace '\.', '' }) -join ';'
+        Write-Host "Detected GPU compute capability, building only for: $Architectures"
+    }
 }
 
 $configureArgs = @(

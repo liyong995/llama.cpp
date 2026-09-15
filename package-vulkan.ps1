@@ -3,7 +3,8 @@
   Usage: .\build-vulkan.ps1 [-Jobs <N>]
 #>
 param(
-    [int]$Jobs = 0
+    # Defaults to all logical cores. Pass 0 to let cmake/MSBuild decide.
+    [int]$Jobs = [System.Environment]::ProcessorCount
 )
 
 $ErrorActionPreference = "Stop"

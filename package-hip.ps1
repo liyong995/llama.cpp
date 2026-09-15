@@ -5,7 +5,8 @@
   Usage: .\build-hip.ps1 [-Jobs <N>] [-GpuTarget <target>]
 #>
 param(
-    [int]$Jobs = 0,
+    # Defaults to all logical cores. Pass 0 to let cmake/Ninja decide.
+    [int]$Jobs = [System.Environment]::ProcessorCount,
     # e.g. gfx1100 (RX 7900XTX/XT), gfx1151 (Ryzen AI Max / Strix Halo)
     [string]$GpuTarget = "gfx1151"
 )
