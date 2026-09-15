@@ -4,7 +4,7 @@ import time
  
 import httpx
  
-SERVER_URL = "http://127.0.0.1:8080/v1/chat/completions"
+SERVER_URL = "http://127.0.0.1:5730/v1/chat/completions"
  
 SYSTEM_PROMPT = (
     "你是一个简洁的助手。直接回答问题本身，不要输出额外的背景介绍、"
