@@ -35,7 +35,8 @@ $configureArgs = @(
     "-S", $PSScriptRoot,
     "-B", $BuildDir,
     "-DCMAKE_BUILD_TYPE=Release",
-    "-DGGML_VULKAN=ON"
+    "-DGGML_VULKAN=ON",
+    "-DGGML_NATIVE=OFF"
 )
 
 cmake @configureArgs

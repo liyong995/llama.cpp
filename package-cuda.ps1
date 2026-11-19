@@ -36,7 +36,8 @@ $configureArgs = @(
     "-S", $PSScriptRoot,
     "-B", $BuildDir,
     "-DCMAKE_BUILD_TYPE=Release",
-    "-DGGML_CUDA=ON"
+    "-DGGML_CUDA=ON",
+    "-DGGML_NATIVE=OFF"
 )
 if ($Architectures) {
     $configureArgs += "-DCMAKE_CUDA_ARCHITECTURES=$Architectures"
